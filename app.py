@@ -1,19 +1,12 @@
 import requests
-import os
-from flask import Flask, request, send_file
+from flask import Flask, request
 
 
 app = Flask(__name__)
 
 
-@app.route("/<path:name>")
-def route(name):
-    try:
-        if os.path.exists(f"cache/{name}"):
-            return send_file(f"cache/{name}")
-    except:
-        pass
-
+@app.before_request
+def before_request():
     response = requests.request(
         url="http://216.9.225.189:9999" + request.path,
         method=request.method,
@@ -25,4 +18,3 @@ def route(name):
 
 if __name__ == "__main__":
     app.run()
-
